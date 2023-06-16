@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mi Juego</title>
+    <link rel="stylesheet" type="text/css" href="estilo_juego.css">
+</head>
+<body>
+    
+    <div class="image-container">
+        <img src="ahorcado.png" class="left-aligned">
+    </div>
+
+    <div class="image-container2">
+        <img src="ahorcado.png" class="left-aligned">
+    </div>
+
+    <div class="jugador-info">
+        <h1 id="nombreJugador"></h1>
+        <p id="puntosJugador">0 puntos</p>
+    </div>
+
+    <div id="pista" class="pista-container">
+        <p>Pregunta: ¿inserta tu pregunta aqui?</p>
+    </div>
+
+    <div class="ahorcado-container">
+        <div id="ahorcado"></div>
+        <div class="guiones-container">
+            <p id="guiones"></p>
+        </div>
+    </div>
+
+    <div class="botones-letras">
+        <button>A</button>
+        <button>B</button>
+        <button>C</button>
+        <button>D</button>
+        <button>E</button>
+        <button>F</button>
+        <button>G</button>
+        <button>H</button>
+        <button>I</button>
+        <button>J</button>
+        <button>K</button>
+        <button>L</button>
+        <button>M</button>
+        <button>Ñ</button>
+        <button>N</button>
+        <button>O</button>
+        <button>P</button>
+        <button>Q</button>
+        <button>R</button>
+        <button>S</button>
+        <button>T</button>
+        <button>U</button>
+        <button>V</button>
+        <button>W</button>
+        <button>X</button>
+        <button>Y</button>
+        <button>Z</button>
+    </div>
+
+    <section>
+        <article>
+            <p id="pregunta"></p>
+        </article>
+        <button id="siguientePregunta" class="siguiente-pregunta" onclick="siguientePregunta()">Pase a la siguiente pregunta</button>
+    </section>
+
+    <!-- <button id="siguientePregunta" class="siguiente-pregunta">Pase a la siguiente pregunta</button> -->
+
+    <h2>{{ titulo }}</h2> <!-- Subtítulo agregado -->
+
+    <script>
+        // Obtener el nombre del jugador guardado en el almacenamiento local
+        var nombreJugador = localStorage.getItem('nombreJugador');
+        // Actualizar el contenido del elemento con el nombre del jugador
+        document.getElementById('nombreJugador').innerText = nombreJugador;
+
+        // Definir la cantidad de guiones iniciales
+        var cantidadGuiones = 6;
+
+        // Generar los guiones iniciales
+        var guiones = '';
+        for (var i = 0; i < cantidadGuiones; i++) {
+            guiones += '_ ';
+        }
+        document.getElementById('guiones').innerText = guiones;
+
+        // Agregar evento de clic a los botones de letras
+        var letras = document.querySelectorAll('.botones-letras button');
+        letras.forEach(function(letra) {
+            letra.addEventListener('click', function() {
+                completarGuiones(this.innerText);
+            });
+        });
+
+        // Función para completar los guiones con la letra seleccionada
+        function completarGuiones(letra) {
+            var guionesElement = document.getElementById('guiones');
+            var contenido = guionesElement.innerText;
+            var nuevoContenido = '';
+
+            var letraInsertada = false;
+
+            for (var i = 0; i < contenido.length; i++) {
+                if (contenido[i] === '_' && !letraInsertada) {
+                    nuevoContenido += letra + ' ';
+                    letraInsertada = true;
+                } else {
+                    nuevoContenido += contenido[i];
+                }
+            }
+
+            guionesElement.innerText = nuevoContenido;
+        }
+
+        let preguntas = [];
+        let preguntaActual = 1;
+
+        function mostrarPregunta() {
+            const pregunta = preguntas[preguntaActual].pregunta;
+            document.querySelector("#pista").textContent = pregunta;
+        }
+
+        function siguientePregunta() {
+            preguntaActual++;
+            if (preguntaActual < preguntas.length) {
+                mostrarPregunta();
+            } else {
+                document.querySelector("#siguientePregunta").textContent = "¡Has respondido todas las preguntas!";
+            }
+        }
+
+        function obtenerPreguntas() {
+            fetch('http://localhost:3000/jugar')
+                .then(response => response.json())
+                .then(data => {
+                    preguntas = data;
+                    mostrarPregunta();
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        obtenerPreguntas();
+        
+    </script>
+    <script src="index.js"></script>
+</body>
+</html>
