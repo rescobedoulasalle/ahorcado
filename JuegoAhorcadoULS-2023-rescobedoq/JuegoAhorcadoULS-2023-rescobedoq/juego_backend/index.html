@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Ahorcado</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <header>
+        <h1>{{ titulo }}</h1>
+    </header>
+    <section>
+        <article>
+            <p id="pregunta"></p>
+            <p id="respuesta"></p>
+        </article>
+        <button onclick="siguientePregunta()">Siguiente</button>
+    </section>
+
+    <script>
+        let preguntas = [];
+        let preguntaActual = 1;
+
+        function mostrarPregunta() {
+            const preguntaElement = document.querySelector("#pregunta");
+            const respuestaElement = document.querySelector("#respuesta");
+
+            const pregunta = preguntas[preguntaActual].pregunta;
+            const respuesta = preguntas[preguntaActual].respuesta;
+
+            preguntaElement.textContent = pregunta;
+
+            // Mostrar subguiones separados por palabras en lugar de la respuesta
+            const subguiones = respuesta
+                .split(" ")
+                .map(word => "_ ".repeat(word.length))
+                .join(" / ");
+
+            respuestaElement.textContent = "Respuesta: " + subguiones;
+        }
+
+
+        function siguientePregunta() {
+            const respuestaElement = document.querySelector("#respuesta");
+
+            respuestaElement.textContent = ""; // Borrar la respuesta antes de avanzar
+
+            preguntaActual++;
+            if (preguntaActual < preguntas.length) {
+                mostrarPregunta();
+            } else {
+                document.querySelector("#pregunta").textContent = "¡Has respondido todas las preguntas!";
+            }
+        }
+
+        function obtenerPreguntas() {
+            fetch('http://localhost:3000/jugar')
+                .then(response => response.json())
+                .then(data => {
+                    preguntas = data;
+                    mostrarPregunta();
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        obtenerPreguntas();
+    </script>
+</body>
+</html>
