@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ahorcado U la Salle</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Ahorcado U la Salle</h1>
+
+    <label for="nombre">Nombre del Jugador:</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <button onclick="iniciarJuego()">Jugar</button>
+
+    <p>¡Bienvenido al juego del Ahorcado de U la Salle!</p>
+    <p>Diviértete adivinando las palabras ocultas.</p>
+  </div>
+
+  <div class="subtitulo">Selecciona la dificultad:</div>
+  <select class="difficulty">
+    <option value="easy">Fácil</option>
+    <option value="medium">Medio</option>
+    <option value="hard">Difícil</option>
+  </select>
+
+  <img class="image" src="imagenes/ahorcado.png" alt="Imagen descriptiva">
+
+  <div class="footer">
+    Creado por:
+    <ul>
+      <li>Carlos Daniel Corrales Yarasca</li>
+      <li>Camila Euridice Huamani Tito</li>
+      <li>Elvis Andre Cruces Gomez</li>
+      <li>Jose Alfredo Pinto Villamar</li>
+      <li>Yoshiro Milton Miranda Valdivia</li>
+    </ul>
+  </div>
+
+  <script>
+    function iniciarJuego() {
+      var nombre = document.getElementById('nombre').value;
+      localStorage.setItem('nombreJugador', nombre); // Guardar el nombre en el almacenamiento local
+      window.location.href = 'juego.html'; // Redireccionar a la página "juego.html"
+    }
+
+  </script>
+</body>
+</html>
