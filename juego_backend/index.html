@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">  
+<head>    
+    <title>Ejemplo Html5</title>    
+    <meta charset="utf-8">
+    <meta name="title" content="Html5">
+    <meta name="description" content="Ejemplo Html5">
+	<meta name="generator"content="Vim" />
+	<meta name="author"content="Richart Escobedo Quispe"/>   
+    <!--<link href="estilos.css" rel="stylesheet">-->
+	<!--<style></style>-->
+	<!--<script src="https://code.jquery.com/jquery-3.5.0.js"></script>-->
+	<!--<script src="script.js"></script>-->
+	<!--<script></script>-->
+</head>  
+<body>    
+    <header>
+		<h2>index.html en el directorio raíz</h2>
+    </header>
+	<nav>
+    </nav>
+    <section>      
+        <article>
+		<p id="preguntas"></p>
+        </article>      
+    </section>
+    <aside>
+    </aside>
+    <footer>
+    </footer>
+	<script>
+	function jugar() {
+		const url = 'http://localhost:3000/jugar'
+		fetch(url).then(
+        response => response.json()
+		).then(
+			data => {
+				document.querySelector("#preguntas").innerHTML = data.preguntas
+			}
+		)
+	}
+	jugar();
+	</script>
+</body>  
+</html>

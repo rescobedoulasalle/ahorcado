@@ -1,0 +1,5 @@
+Preguntas para programadores
+¿Quién es el padre de la Programación Orientada a Objetos?|ALAN KAY
+¿Quién creó el sistema de control de versiones Git?|LINUS TORVALS
+¿Quién fundo la Free Software Foundation?|RICHARD STALLMAN
+¿Qué lenguaje de programación entiende un navegador web?JAVASCRIPT
