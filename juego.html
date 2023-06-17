@@ -24,12 +24,12 @@
     </div>
 
     <div class="ahorcado-container">
-        <div id="ahorcado"></div>
+        <div id="ahorcado"></div>        
         <div class="guiones-container">
             <p id="guiones"></p>
         </div>
     </div>
-
+    
     <div class="botones-letras">
         <button>A</button>
         <button>B</button>
@@ -80,6 +80,9 @@
         // Definir la cantidad de guiones iniciales
         var cantidadGuiones = 6;
 
+        var siguientePreguntaBtn = document.getElementById('siguientePregunta');
+        siguientePreguntaBtn.disabled = true; // Deshabilitar el botón "Pase a la siguiente pregunta"
+
         // Generar los guiones iniciales en base a la respuesta
         function generarGuiones(respuesta) {
             var guiones = '';
@@ -116,18 +119,23 @@
             document.getElementById('guiones').innerText = guiones;
         }
 
+        var contadorErrores = 0; // Variable para contar los errores
+        var contadorPuntos = 0; // Variable para contar los puntos
+
         function completarGuiones(letra) {
             var guionesElement = document.getElementById('guiones');
             var contenido = guionesElement.innerText;
             var nuevoContenido = '';
 
             var respuesta = preguntas[preguntaActual].respuesta;
+            var seReemplazoGuion = false; // Variable para controlar si se reemplazó algún guion
 
             for (var i = 0; i < respuesta.length; i++) {
                 if (respuesta[i] === ' ') {
                     nuevoContenido += ' ';
                 } else if (contenido[i * 2] === '_' && respuesta[i].toLowerCase() === letra.toLowerCase()) {
                     nuevoContenido += letra;
+                    seReemplazoGuion = true; // Se reemplazó un guion
                 } else {
                     nuevoContenido += contenido[i * 2];
                 }
@@ -135,16 +143,112 @@
             }
 
             guionesElement.innerText = nuevoContenido;
+
+            // Bloquear el botón de la letra seleccionada
+            var letras = document.querySelectorAll('.botones-letras button');
+            letras.forEach(function(letraButton) {
+                if (letraButton.innerText === letra) {
+                    letraButton.disabled = true; // Bloquear el botón
+                }
+            });
+
+            if (seReemplazoGuion) {
+                incrementarPuntos(1); // Incrementar 1 punto por letra correcta
+                if (nuevoContenido.indexOf('_') === -1) {
+                    incrementarPuntos(5); // Incrementar 5 puntos cuando se completan todos los guiones
+
+                    bloquearBotonesLetras(); // Bloquear los botones de las letras
+                    mostrarMensaje("¡BIEN HECHO!"); // Mostrar mensaje de "BIEN HECHO"
+                    resaltarBotonSiguiente();
+
+                    var siguientePreguntaBtn = document.getElementById('siguientePregunta');
+                    siguientePreguntaBtn.disabled = false; // Deshabilitar el botón "Pase a la siguiente pregunta"
+                }
+            } else {
+                mostrarImagen();
+                contadorErrores++; // Incrementar el contador de errores
+            }
         }
+
+        function mostrarImagen() {
+            var ahorcadoDiv = document.getElementById('ahorcado');
+            var imagenURL = 'https://jadigar.neocities.org/codepen/ahorcado-' + contadorErrores + '.jpg';
+            ahorcadoDiv.innerHTML = '<img src="' + imagenURL + '" alt="Imagen del ahorcado">';
+
+            if (contadorErrores === 6) {
+                bloquearBotonesLetras(); // Bloquear los botones de las letras
+                var imagenURL2 = 'https://media.istockphoto.com/id/1307986275/es/vector/pixel-game-over-8-bits-pixel-game-over-vector-background.jpg?s=612x612&w=0&k=20&c=ZVJ3SMpO7CB7PqYJeuD2pfv3ZWSIRIR7H32z8yZARwI=';
+                // Retrasar el reemplazo de la imagen durante 2 segundos
+                setTimeout(function() {
+                    ahorcadoDiv.innerHTML = '<img src="' + imagenURL2 + '" alt="Imagen del ahorcado">';
+                }, 2000);
+            }
+        }
+        
+        function incrementarPuntos(cantidad) {
+            contadorPuntos += cantidad;
+            var puntosJugadorElement = document.getElementById('puntosJugador');
+            puntosJugadorElement.innerText = contadorPuntos + ' puntos';
+        }
+
+        function bloquearBotonesLetras() {
+            var botonesLetras = document.querySelectorAll('.botones-letras button');
+            botonesLetras.forEach(function (boton) {
+                boton.disabled = true; // Deshabilitar el botón de la letra
+            });
+        }
+
+        function bloquearBotonSiguiente() {
+            var siguientePreguntaBtn = document.getElementById('siguientePregunta');
+            siguientePreguntaBtn.disabled = true; // Deshabilitar el botón "Pase a la siguiente pregunta"
+        }          
 
         function siguientePregunta() {
             preguntaActual++;
+            contadorErrores = 0; // Reiniciar el contador de errores
+
+            var botonSiguiente = document.getElementById('siguientePregunta');
+            botonSiguiente.style.backgroundColor = "buttonface"; // Cambiar el color de fondo del botón a turquesa
+
+            var siguientePreguntaBtn = document.getElementById('siguientePregunta');
+            siguientePreguntaBtn.disabled = true; // Deshabilitar el botón "Pase a la siguiente pregunta"
+
+            // Habilitar los botones de las letras
+            var letras = document.querySelectorAll('.botones-letras button');
+            letras.forEach(function(letra) {
+                letra.disabled = false;
+            });
+
+            // Limpiar el contenido del contenedor "ahorcado"
+            var ahorcadoDiv = document.getElementById('ahorcado');
+            ahorcadoDiv.removeChild(ahorcadoDiv.firstChild);
+
             if (preguntaActual < preguntas.length) {
                 mostrarPregunta();
             } else {
                 document.querySelector("#siguientePregunta").textContent = "¡Has respondido todas las preguntas!";
             }
         }
+
+        function resaltarBotonSiguiente() {
+            var botonSiguiente = document.getElementById('siguientePregunta');
+            botonSiguiente.style.backgroundColor = "skyblue"; // Cambiar el color de fondo del botón a turquesa
+        }        
+        
+        function mostrarMensaje(mensaje) {
+            var ahorcadoDiv = document.getElementById('ahorcado');
+        
+            // Eliminar cualquier elemento hijo existente en el contenedor
+            while (ahorcadoDiv.firstChild) {
+                ahorcadoDiv.removeChild(ahorcadoDiv.firstChild);
+            }
+        
+            var imagenElement = document.createElement('img');
+            imagenElement.src = 'https://i.pinimg.com/236x/21/e3/ab/21e3ab97caa6b53321c6afa8740392b6.jpg';
+            imagenElement.classList.add('imagen-bien-hecho'); // Agregar la clase CSS al elemento
+        
+            ahorcadoDiv.appendChild(imagenElement);
+        }                      
 
         function obtenerPreguntas() {
             fetch('http://localhost:3000/jugar')

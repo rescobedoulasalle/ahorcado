@@ -55,6 +55,14 @@ body {
     background-color: #ffffff;
     border: 2px solid #000000;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#ahorcado img {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .guiones-container {
@@ -80,6 +88,7 @@ body {
     margin: 5px;
     font-size: 24px;
     padding: 10px 20px;
+    cursor: pointer;
 }
 
 .image-container {
@@ -111,6 +120,7 @@ body {
     transform: translateX(-50%);
     font-size: 18px;
     padding: 10px 20px;
+    cursor: pointer;
 }
 
 h2 {
@@ -120,4 +130,8 @@ h2 {
     transform: translateX(-50%);
     font-size: 24px;
     text-align: center;
+}
+
+.mensaje-bien-hecho {
+    font-size: 36px;
 }
