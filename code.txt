@@ -1,0 +1,113 @@
+// Generar los guiones iniciales
+var guiones = '';
+for (var i = 0; i < cantidadGuiones; i++) {
+    guiones += '_ ';
+}
+document.getElementById('guiones').innerText = guiones;
+
+// Agregar evento de clic a los botones de letras
+var letras = document.querySelectorAll('.botones-letras button');
+letras.forEach(function(letra) {
+    letra.addEventListener('click', function() {
+        completarGuiones(this.innerText);
+    });
+});
+
+// Función para completar los guiones con la letra seleccionada
+function completarGuiones(letra) {
+    var guionesElement = document.getElementById('guiones');
+    var contenido = guionesElement.innerText;
+    var nuevoContenido = '';
+
+    var letraInsertada = false;
+
+    for (var i = 0; i < contenido.length; i++) {
+        if (contenido[i] === '_' && !letraInsertada) {
+            nuevoContenido += letra + ' ';
+            letraInsertada = true;
+        } else {
+            nuevoContenido += contenido[i];
+        }
+    }
+
+    guionesElement.innerText = nuevoContenido;
+}
+
+
+
+
+
+
+
+//VERSION 2.0
+
+<script>
+    // Obtener el nombre del jugador guardado en el almacenamiento local
+    var nombreJugador = localStorage.getItem('nombreJugador');
+    // Actualizar el contenido del elemento con el nombre del jugador
+    document.getElementById('nombreJugador').innerText = nombreJugador;
+
+    // Definir la cantidad de guiones iniciales
+    var cantidadGuiones = 6;
+
+    // Generar los guiones iniciales en base a la respuesta
+    function generarGuiones(respuesta) {
+        var guiones = '';
+
+        for (var i = 0; i < respuesta.length; i++) {
+            if (respuesta[i] === ' ') {
+                guiones += ' '; // Agregar espacio si el carácter es un espacio
+            } else {
+                guiones += '_'; // Agregar guión si el carácter no es un espacio
+            }
+            guiones += ' '; // Agregar un espacio después de cada guión o espacio
+        }
+
+        return guiones.trim(); // Eliminar espacios en blanco adicionales al final
+    }
+
+    // Agregar evento de clic a los botones de letras
+    var letras = document.querySelectorAll('.botones-letras button');
+    letras.forEach(function(letra) {
+        letra.addEventListener('click', function() {
+            completarGuiones(this.innerText);
+        });
+    });
+
+    let preguntas = [];
+    let preguntaActual = 1;
+
+    function mostrarPregunta() {
+        const pregunta = preguntas[preguntaActual].pregunta;
+        document.querySelector("#pista").textContent = pregunta;
+
+        const respuesta = preguntas[preguntaActual].respuesta;
+        const guiones = generarGuiones(respuesta);
+        document.getElementById('guiones').innerText = guiones;
+    }
+
+    function siguientePregunta() {
+        preguntaActual++;
+        if (preguntaActual < preguntas.length) {
+            mostrarPregunta();
+        } else {
+            document.querySelector("#siguientePregunta").textContent = "¡Has respondido todas las preguntas!";
+        }
+    }
+
+    function obtenerPreguntas() {
+        fetch('http://localhost:3000/jugar')
+            .then(response => response.json())
+            .then(data => {
+                preguntas = data;
+                mostrarPregunta();
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    obtenerPreguntas();
+
+</script>
+    

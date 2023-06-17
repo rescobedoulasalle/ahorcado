@@ -44,8 +44,8 @@
         <button>K</button>
         <button>L</button>
         <button>M</button>
-        <button>Ñ</button>
         <button>N</button>
+        <button>Ñ</button>
         <button>O</button>
         <button>P</button>
         <button>Q</button>
@@ -80,12 +80,21 @@
         // Definir la cantidad de guiones iniciales
         var cantidadGuiones = 6;
 
-        // Generar los guiones iniciales
-        var guiones = '';
-        for (var i = 0; i < cantidadGuiones; i++) {
-            guiones += '_ ';
+        // Generar los guiones iniciales en base a la respuesta
+        function generarGuiones(respuesta) {
+            var guiones = '';
+
+            for (var i = 0; i < respuesta.length; i++) {
+                if (respuesta[i] === ' ') {
+                    guiones += ' '; // Agregar espacio si el carácter es un espacio
+                } else {
+                    guiones += '_'; // Agregar guión si el carácter no es un espacio
+                }
+                guiones += ' '; // Agregar un espacio después de cada guión o espacio
+            }
+
+            return guiones.trim(); // Eliminar espacios en blanco adicionales al final
         }
-        document.getElementById('guiones').innerText = guiones;
 
         // Agregar evento de clic a los botones de letras
         var letras = document.querySelectorAll('.botones-letras button');
@@ -95,32 +104,37 @@
             });
         });
 
-        // Función para completar los guiones con la letra seleccionada
-        function completarGuiones(letra) {
-            var guionesElement = document.getElementById('guiones');
-            var contenido = guionesElement.innerText;
-            var nuevoContenido = '';
-
-            var letraInsertada = false;
-
-            for (var i = 0; i < contenido.length; i++) {
-                if (contenido[i] === '_' && !letraInsertada) {
-                    nuevoContenido += letra + ' ';
-                    letraInsertada = true;
-                } else {
-                    nuevoContenido += contenido[i];
-                }
-            }
-
-            guionesElement.innerText = nuevoContenido;
-        }
-
         let preguntas = [];
         let preguntaActual = 1;
 
         function mostrarPregunta() {
             const pregunta = preguntas[preguntaActual].pregunta;
             document.querySelector("#pista").textContent = pregunta;
+            
+            const respuesta = preguntas[preguntaActual].respuesta;
+            const guiones = generarGuiones(respuesta);
+            document.getElementById('guiones').innerText = guiones;
+        }
+
+        function completarGuiones(letra) {
+            var guionesElement = document.getElementById('guiones');
+            var contenido = guionesElement.innerText;
+            var nuevoContenido = '';
+
+            var respuesta = preguntas[preguntaActual].respuesta;
+
+            for (var i = 0; i < respuesta.length; i++) {
+                if (respuesta[i] === ' ') {
+                    nuevoContenido += ' ';
+                } else if (contenido[i * 2] === '_' && respuesta[i].toLowerCase() === letra.toLowerCase()) {
+                    nuevoContenido += letra;
+                } else {
+                    nuevoContenido += contenido[i * 2];
+                }
+                nuevoContenido += ' ';
+            }
+
+            guionesElement.innerText = nuevoContenido;
         }
 
         function siguientePregunta() {
@@ -145,7 +159,7 @@
         }
 
         obtenerPreguntas();
-        
+
     </script>
     <script src="index.js"></script>
 </body>
