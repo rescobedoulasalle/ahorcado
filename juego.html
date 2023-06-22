@@ -208,6 +208,7 @@
                     bloquearBotonesLetras(); // Bloquear los botones de las letras
                     mostrarMensaje("¡BIEN HECHO!"); // Mostrar mensaje de "BIEN HECHO"
                     resaltarBotonSiguiente();
+                    document.onkeypress = null;
 
                     var siguientePreguntaBtn = document.getElementById('siguientePregunta');
                     siguientePreguntaBtn.disabled = false; // Deshabilitar el botón "Pase a la siguiente pregunta"
@@ -266,6 +267,18 @@
             letras.forEach(function(letra) {
                 letra.disabled = false;
             });
+
+            // Crear un objeto para almacenar las letras presionadas
+            var letrasPresionadas = {};
+
+            // Agregar evento de pulsación de tecla
+            document.onkeypress = function(event) {
+                var key = event.key.toUpperCase();
+                if (/^[A-ZÑ]$/.test(key) && !letrasPresionadas[key]) {
+                    letrasPresionadas[key] = true;
+                    completarGuiones(key);
+                }
+            };
 
             // Limpiar el contenido del contenedor "ahorcado"
             var ahorcadoDiv = document.getElementById('ahorcado');
