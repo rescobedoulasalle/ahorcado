@@ -206,7 +206,7 @@
                     incrementarPuntos(5); // Incrementar 5 puntos cuando se completan todos los guiones
 
                     bloquearBotonesLetras(); // Bloquear los botones de las letras
-                    mostrarMensaje("¡BIEN HECHO!"); // Mostrar mensaje de "BIEN HECHO"
+                    mostrarMensaje(); // Mostrar imagen de bien hecho
                     resaltarBotonSiguiente();
                     document.onkeypress = null;
 
@@ -296,7 +296,7 @@
             botonSiguiente.style.backgroundColor = "green"; // Cambiar el color de fondo del botón a turquesa
         }
 
-        function mostrarMensaje(mensaje) {
+        function mostrarMensaje() {
             var ahorcadoDiv = document.getElementById('ahorcado');
 
             // Eliminar cualquier elemento hijo existente en el contenedor
@@ -304,11 +304,8 @@
                 ahorcadoDiv.removeChild(ahorcadoDiv.firstChild);
             }
 
-            var imagenElement = document.createElement('img');
-            imagenElement.src = 'https://i.pinimg.com/236x/21/e3/ab/21e3ab97caa6b53321c6afa8740392b6.jpg';
-            imagenElement.classList.add('imagen-bien-hecho'); // Agregar la clase CSS al elemento
-
-            ahorcadoDiv.appendChild(imagenElement);
+            var imagenURL = 'https://thumbs.dreamstime.com/b/bien-hecho-23443783.jpg';
+            ahorcadoDiv.innerHTML = '<img src="' + imagenURL + '" alt="Imagen del ahorcado">';
         }
 
         function obtenerPreguntas() {
