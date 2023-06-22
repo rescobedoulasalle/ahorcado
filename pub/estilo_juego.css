@@ -4,10 +4,13 @@ body {
 }
 
 #colorOptions {
-    position: absolute;
+    position: fixed;
     bottom: 15px;
     right: 10px;
-    cursor: pointer;
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     background-color: gray;
 }
 
