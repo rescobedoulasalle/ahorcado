@@ -3,6 +3,25 @@ body {
     background-repeat: repeat;
 }
 
+#colorOptions {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    cursor: pointer;
+    background-color: gray;
+}
+
+#colorOptions select {
+    background-color: LightGray;
+  }  
+
+#colorOptions select,
+#colorOptions button {
+  font-size: 16px;
+  padding: 10px;
+  width: 120px;
+}
+
 .jugador-info {
     position: absolute;
     top: 3%;

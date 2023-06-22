@@ -67,7 +67,14 @@
         <button id="siguientePregunta" class="siguiente-pregunta" onclick="siguientePregunta()">Pase a la siguiente pregunta</button>
     </section>
 
-    <!-- <button id="siguientePregunta" class="siguiente-pregunta">Pase a la siguiente pregunta</button> -->
+    <div id="colorOptions">
+        <select onchange="cambiarColor(this.value)">
+            <option value="#ffffbf">DEFAULT</option>
+            <option value="gray">DARK</option>
+            <option value="pink">PINK</option>
+            <option value="white">FRIKI</option>
+        </select>
+    </div>    
 
     <h2>{{ titulo }}</h2> <!-- Subtítulo agregado -->
 
@@ -106,6 +113,22 @@
                 completarGuiones(this.innerText);
             });
         });
+
+        // Agregar evento de pulsación de tecla
+        document.onkeypress = function(event) {
+            var key = event.key.toUpperCase();
+            if (/^[A-ZÑ]$/.test(key)) {
+                completarGuiones(key);
+            }
+        };
+
+        function cambiarColor(color) {
+            var bodyElement = document.querySelector('body');
+          
+            if (bodyElement) {
+              bodyElement.style.backgroundColor = color;
+            }
+        }
 
         let preguntas = [];
         let preguntaActual = 1;
