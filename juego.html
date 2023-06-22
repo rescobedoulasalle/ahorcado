@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mi Juego</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="estilo_juego.css">
+</head>
+<body>
+
+    <div class="image-container" >
+        <img src="ahorcado.png" class="left-aligned">
+    </div>
+
+    <div class="image-container2">
+        <img src="ahorcado.png" class="left-aligned">
+    </div>
+
+        <div class="row">
+
+                <div class="jugador-info">
+                    <h1 id="nombreJugador"></h1>
+                    <p id="puntosJugador">0 puntos</p>
+                </div>
+            </div>
+        </div>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-13 ms-md-auto">
+                <div id="pista" class="pista-container">
+                    <p>Pregunta: ¿inserta tu pregunta aqui?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-15 offset-md-3">
+                <div class="ahorcado-container">
+                    <div id="ahorcado"></div>
+                    <div class="guiones-container">
+                        <div id="guiones"></div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+
+    <div class="botones-letras">
+        <button >A</button>
+        <button>B</button>
+        <button>C</button>
+        <button>D</button>
+        <button>E</button>
+        <button>F</button>
+        <button>G</button>
+        <button>H</button>
+        <button>I</button>
+        <button>J</button>
+        <button>K</button>
+        <button>L</button>
+        <button>M</button>
+        <button>N</button>
+        <button>Ñ</button>
+        <button>O</button>
+        <button>P</button>
+        <button>Q</button>
+        <button>R</button>
+        <button>S</button>
+        <button>T</button>
+        <button>U</button>
+        <button>V</button>
+        <button>W</button>
+        <button>X</button>
+        <button>Y</button>
+        <button>Z</button>
+    </div>
+
+    <section>
+        <article>
+            <p id="pregunta"></p>
+        </article>
+        <button id="siguientePregunta" class="siguiente-pregunta" onclick="siguientePregunta()">Pase a la siguiente pregunta</button>
+    </section>
+
+    <!-- <button id="siguientePregunta" class="siguiente-pregunta">Pase a la siguiente pregunta</button> -->
+
+    <h2>{{ titulo }}</h2> <!-- Subtítulo agregado -->
+
+    <script>
+        // Obtener el nombre del jugador guardado en el almacenamiento local
+        var nombreJugador = localStorage.getItem('nombreJugador');
+        // Actualizar el contenido del elemento con el nombre del jugador
+        document.getElementById('nombreJugador').innerText = nombreJugador;
+
+        // Definir la cantidad de guiones iniciales
+        var cantidadGuiones = 6;
+
+        var siguientePreguntaBtn = document.getElementById('siguientePregunta');
+        siguientePreguntaBtn.disabled = true; // Deshabilitar el botón "Pase a la siguiente pregunta"
+
+        // Generar los guiones iniciales en base a la respuesta
+        function generarGuiones(respuesta) {
+            var guiones = '';
+
+            for (var i = 0; i < respuesta.length; i++) {
+                if (respuesta[i] === ' ') {
+                    guiones += ' '; // Agregar espacio si el carácter es un espacio
+                } else {
+                    guiones += '_'; // Agregar guión si el carácter no es un espacio
+                }
+                guiones += ' '; // Agregar un espacio después de cada guión o espacio
+            }
+
+            return guiones.trim(); // Eliminar espacios en blanco adicionales al final
+        }
+
+        // Agregar evento de clic a los botones de letras
+        var letras = document.querySelectorAll('.botones-letras button');
+        letras.forEach(function(letra) {
+            letra.addEventListener('click', function() {
+                completarGuiones(this.innerText);
+            });
+        });
+
+        let preguntas = [];
+        let preguntaActual = 1;
+
+        function mostrarPregunta() {
+            const pregunta = preguntas[preguntaActual].pregunta;
+            document.querySelector("#pista").textContent = pregunta;
+
+            const respuesta = preguntas[preguntaActual].respuesta;
+            const guiones = generarGuiones(respuesta);
+            document.getElementById('guiones').innerText = guiones;
+        }
+
+        var contadorErrores = 0; // Variable para contar los errores
+        var contadorPuntos = 0; // Variable para contar los puntos
+
+        function completarGuiones(letra) {
+            var guionesElement = document.getElementById('guiones');
+            var contenido = guionesElement.innerText;
+            var nuevoContenido = '';
+
+            var respuesta = preguntas[preguntaActual].respuesta;
+            var seReemplazoGuion = false; // Variable para controlar si se reemplazó algún guion
+
+            for (var i = 0; i < respuesta.length; i++) {
+                if (respuesta[i] === ' ') {
+                    nuevoContenido += ' ';
+                } else if (contenido[i * 2] === '_' && respuesta[i].toLowerCase() === letra.toLowerCase()) {
+                    nuevoContenido += letra;
+                    seReemplazoGuion = true; // Se reemplazó un guion
+                } else {
+                    nuevoContenido += contenido[i * 2];
+                }
+                nuevoContenido += ' ';
+            }
+
+            guionesElement.innerText = nuevoContenido;
+
+            // Bloquear el botón de la letra seleccionada
+            var letras = document.querySelectorAll('.botones-letras button');
+            letras.forEach(function(letraButton) {
+                if (letraButton.innerText === letra) {
+                    letraButton.disabled = true; // Bloquear el botón
+                }
+            });
+
+            if (seReemplazoGuion) {
+                incrementarPuntos(1); // Incrementar 1 punto por letra correcta
+                if (nuevoContenido.indexOf('_') === -1) {
+                    incrementarPuntos(5); // Incrementar 5 puntos cuando se completan todos los guiones
+
+                    bloquearBotonesLetras(); // Bloquear los botones de las letras
+                    mostrarMensaje("¡BIEN HECHO!"); // Mostrar mensaje de "BIEN HECHO"
+                    resaltarBotonSiguiente();
+
+                    var siguientePreguntaBtn = document.getElementById('siguientePregunta');
+                    siguientePreguntaBtn.disabled = false; // Deshabilitar el botón "Pase a la siguiente pregunta"
+                }
+            } else {
+                mostrarImagen();
+                contadorErrores++; // Incrementar el contador de errores
+            }
+        }
+
+        function mostrarImagen() {
+            var ahorcadoDiv = document.getElementById('ahorcado');
+            var imagenURL = 'https://jadigar.neocities.org/codepen/ahorcado-' + contadorErrores + '.jpg';
+            ahorcadoDiv.innerHTML = '<img src="' + imagenURL + '" alt="Imagen del ahorcado">';
+
+            if (contadorErrores === 6) {
+                bloquearBotonesLetras(); // Bloquear los botones de las letras
+                var imagenURL2 = 'https://media.istockphoto.com/id/1307986275/es/vector/pixel-game-over-8-bits-pixel-game-over-vector-background.jpg?s=612x612&w=0&k=20&c=ZVJ3SMpO7CB7PqYJeuD2pfv3ZWSIRIR7H32z8yZARwI=';
+                // Retrasar el reemplazo de la imagen durante 2 segundos
+                setTimeout(function() {
+                    ahorcadoDiv.innerHTML = '<img src="' + imagenURL2 + '" alt="Imagen del ahorcado">';
+                }, 2000);
+            }
+        }
+
+        function incrementarPuntos(cantidad) {
+            contadorPuntos += cantidad;
+            var puntosJugadorElement = document.getElementById('puntosJugador');
+            puntosJugadorElement.innerText = contadorPuntos + ' puntos';
+        }
+
+        function bloquearBotonesLetras() {
+            var botonesLetras = document.querySelectorAll('.botones-letras button');
+            botonesLetras.forEach(function (boton) {
+                boton.disabled = true; // Deshabilitar el botón de la letra
+            });
+        }
+
+        function bloquearBotonSiguiente() {
+            var siguientePreguntaBtn = document.getElementById('siguientePregunta');
+            siguientePreguntaBtn.disabled = true; // Deshabilitar el botón "Pase a la siguiente pregunta"
+        }
+
+        function siguientePregunta() {
+            preguntaActual++;
+            contadorErrores = 0; // Reiniciar el contador de errores
+
+            var botonSiguiente = document.getElementById('siguientePregunta');
+            botonSiguiente.style.backgroundColor = "buttonface"; // Cambiar el color de fondo del botón a turquesa
+
+            var siguientePreguntaBtn = document.getElementById('siguientePregunta');
+            siguientePreguntaBtn.disabled = true; // Deshabilitar el botón "Pase a la siguiente pregunta"
+
+            // Habilitar los botones de las letras
+            var letras = document.querySelectorAll('.botones-letras button');
+            letras.forEach(function(letra) {
+                letra.disabled = false;
+            });
+
+            // Limpiar el contenido del contenedor "ahorcado"
+            var ahorcadoDiv = document.getElementById('ahorcado');
+            ahorcadoDiv.removeChild(ahorcadoDiv.firstChild);
+
+            if (preguntaActual < preguntas.length) {
+                mostrarPregunta();
+            } else {
+                document.querySelector("#siguientePregunta").textContent = "¡Has respondido todas las preguntas!";
+            }
+        }
+
+        function resaltarBotonSiguiente() {
+            var botonSiguiente = document.getElementById('siguientePregunta');
+            botonSiguiente.style.backgroundColor = "green"; // Cambiar el color de fondo del botón a turquesa
+        }
+
+        function mostrarMensaje(mensaje) {
+            var ahorcadoDiv = document.getElementById('ahorcado');
+
+            // Eliminar cualquier elemento hijo existente en el contenedor
+            while (ahorcadoDiv.firstChild) {
+                ahorcadoDiv.removeChild(ahorcadoDiv.firstChild);
+            }
+
+            var imagenElement = document.createElement('img');
+            imagenElement.src = 'https://i.pinimg.com/236x/21/e3/ab/21e3ab97caa6b53321c6afa8740392b6.jpg';
+            imagenElement.classList.add('imagen-bien-hecho'); // Agregar la clase CSS al elemento
+
+            ahorcadoDiv.appendChild(imagenElement);
+        }
+
+        function obtenerPreguntas() {
+            fetch('http://localhost:3000/jugar')
+                .then(response => response.json())
+                .then(data => {
+                    preguntas = data;
+                    mostrarPregunta();
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        obtenerPreguntas();
+
+    </script>
+    <script src="index.js"></script>
+</body>
+</html>
