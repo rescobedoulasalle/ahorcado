@@ -2,92 +2,104 @@
 <html>
 <head>
     <title>Mi Juego</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="estilo_juego.css">
-    <meta name="viewport" content="width=device-width, user-scaleble=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 </head>
 <body>
 
-    <header>
-        <h2>{{ titulo }}</h2> <!-- Subtítulo agregado -->
-    </header>
-    <div class="afuera-container">
-            <div class="jugador-info">
-                <h1 id="nombreJugador"></h1>
-                <p id="puntosJugador">0 puntos</p>
-            </div>
-
-            <div class="arriba-info">
-                <div id="pista" class="pista-container"></div>
-                <button id="siguientePregunta" class="siguiente-pregunta" onclick="siguientePregunta()">siguiente pregunta</button>
-            </div>
-
-            <div id="colorOptions">
-                <select onchange="cambiarColor(this.value)">
-                    <option value="#ffffbf">DEFAULT</option>
-                    <option value="gray">DARK</option>
-                    <option value="pink">PINK</option>
-                    <option value="white">FRIKI</option>
-                </select>
-            </div>    
+    <div class="image-container" >
+        <img src="ahorcado.png" class="left-aligned">
     </div>
 
-    <div class="contenedor-todo">
+    <div class="image-container2">
+        <img src="ahorcado.png" class="left-aligned">
+    </div>
 
-        <!-- <button id="siguientePregunta" class="siguiente-pregunta">Pase a la siguiente pregunta</button> -->
-        <div class="image-container">
-            <img src="ahorcado.png" class="left-aligned">
-        </div>
+        <div class="row">
 
-        <div class="image-container2">
-            <img src="ahorcado.png" class="left-aligned">
-        </div>
-
-
-        <div class="contenedor-juego">
-            <div class="ahorcado-container">
-                <div id="ahorcado"></div>   
+                <div class="jugador-info">
+                    <h1 id="nombreJugador"></h1>
+                    <p id="puntosJugador">0 puntos</p>
+                </div>
             </div>
         </div>
-
-
-        <div class="guiones-container">
-            <p id="guiones"></p>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-13 ms-md-auto">
+                <div id="pista" class="pista-container">
+                    <p>Pregunta: ¿inserta tu pregunta aqui?</p>
+                </div>
+            </div>
         </div>
-        
-        <div class="botones-letras">
-            <button>A</button>
-            <button>B</button>
-            <button>C</button>
-            <button>D</button>
-            <button>E</button>
-            <button>F</button>
-            <button>G</button>
-            <button>H</button>
-            <button>I</button>
-            <button>J</button>
-            <button>K</button>
-            <button>L</button>
-            <button>M</button>
-            <button>N</button>
-            <button>Ñ</button>
-            <button>O</button>
-            <button>P</button>
-            <button>Q</button>
-            <button>R</button>
-            <button>S</button>
-            <button>T</button>
-            <button>U</button>
-            <button>V</button>
-            <button>W</button>
-            <button>X</button>
-            <button>Y</button>
-            <button>Z</button>
-        </div>
- 
     </div>
+
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-15 offset-md-3">
+                <div class="ahorcado-container">
+                    <div id="ahorcado"></div>
+                    <div class="guiones-container">
+                        <div id="guiones"></div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+
+    <div class="botones-letras">
+        <button>A</button>
+        <button>B</button>
+        <button>C</button>
+        <button>D</button>
+        <button>E</button>
+        <button>F</button>
+        <button>G</button>
+        <button>H</button>
+        <button>I</button>
+        <button>J</button>
+        <button>K</button>
+        <button>L</button>
+        <button>M</button>
+        <button>N</button>
+        <button>Ñ</button>
+        <button>O</button>
+        <button>P</button>
+        <button>Q</button>
+        <button>R</button>
+        <button>S</button>
+        <button>T</button>
+        <button>U</button>
+        <button>V</button>
+        <button>W</button>
+        <button>X</button>
+        <button>Y</button>
+        <button>Z</button>
+    </div>
+
+    <section>
+        <article>
+            <p id="pregunta"></p>
+        </article>
+        <button id="siguientePregunta" class="siguiente-pregunta" onclick="siguientePregunta()">Pase a la siguiente pregunta</button>
+    </section>
+
+    <div id="colorOptions">
+        <select onchange="cambiarColor(this.value)">
+            <option value="#ffffbf">DEFAULT</option>
+            <option value="gray">DARK</option>
+            <option value="pink">PINK</option>
+            <option value="white">FRIKI</option>
+        </select>
+    </div> 
+
+    <h2>{{ titulo }}</h2> <!-- Subtítulo agregado -->
 
     <script>
-        
         // Obtener el nombre del jugador guardado en el almacenamiento local
         var nombreJugador = localStorage.getItem('nombreJugador');
         // Actualizar el contenido del elemento con el nombre del jugador
@@ -145,7 +157,7 @@
         function mostrarPregunta() {
             const pregunta = preguntas[preguntaActual].pregunta;
             document.querySelector("#pista").textContent = pregunta;
-            
+
             const respuesta = preguntas[preguntaActual].respuesta;
             const guiones = generarGuiones(respuesta);
             document.getElementById('guiones').innerText = guiones;
@@ -216,7 +228,7 @@
                 }, 2000);
             }
         }
-        
+
         function incrementarPuntos(cantidad) {
             contadorPuntos += cantidad;
             var puntosJugadorElement = document.getElementById('puntosJugador');
@@ -233,7 +245,7 @@
         function bloquearBotonSiguiente() {
             var siguientePreguntaBtn = document.getElementById('siguientePregunta');
             siguientePreguntaBtn.disabled = true; // Deshabilitar el botón "Pase a la siguiente pregunta"
-        }          
+        }
 
         function siguientePregunta() {
             preguntaActual++;
@@ -264,23 +276,23 @@
 
         function resaltarBotonSiguiente() {
             var botonSiguiente = document.getElementById('siguientePregunta');
-            botonSiguiente.style.backgroundColor = "skyblue"; // Cambiar el color de fondo del botón a turquesa
-        }        
-        
+            botonSiguiente.style.backgroundColor = "green"; // Cambiar el color de fondo del botón a turquesa
+        }
+
         function mostrarMensaje(mensaje) {
             var ahorcadoDiv = document.getElementById('ahorcado');
-        
+
             // Eliminar cualquier elemento hijo existente en el contenedor
             while (ahorcadoDiv.firstChild) {
                 ahorcadoDiv.removeChild(ahorcadoDiv.firstChild);
             }
-        
+
             var imagenElement = document.createElement('img');
             imagenElement.src = 'https://i.pinimg.com/236x/21/e3/ab/21e3ab97caa6b53321c6afa8740392b6.jpg';
             imagenElement.classList.add('imagen-bien-hecho'); // Agregar la clase CSS al elemento
-        
+
             ahorcadoDiv.appendChild(imagenElement);
-        }                      
+        }
 
         function obtenerPreguntas() {
             fetch('http://localhost:3000/jugar')
@@ -293,8 +305,6 @@
                     console.error(error);
                 });
         }
-
-        
 
         obtenerPreguntas();
 

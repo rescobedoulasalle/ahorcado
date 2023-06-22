@@ -48,4 +48,4 @@ app.get('/jugar', (request, response) => {
 	  console.error(error);
 	  response.status(500).send('Error al leer el archivo de preguntas.');
 	});
-  });
+});
