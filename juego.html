@@ -135,10 +135,14 @@
             });
         });
 
+        // Crear un objeto para almacenar las letras presionadas
+        var letrasPresionadas = {};
+
         // Agregar evento de pulsación de tecla
         document.onkeypress = function(event) {
             var key = event.key.toUpperCase();
-            if (/^[A-ZÑ]$/.test(key)) {
+            if (/^[A-ZÑ]$/.test(key) && !letrasPresionadas[key]) {
+                letrasPresionadas[key] = true;
                 completarGuiones(key);
             }
         };
